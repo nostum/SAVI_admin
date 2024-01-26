@@ -407,7 +407,7 @@ export interface Database {
       expense_item: {
         Row: {
           cost_price_applied: number
-          cost_price_at_the_moment: number | null
+          cost_price_at_the_moment: number
           created_at: string
           expense_id: number
           id: number
@@ -417,7 +417,7 @@ export interface Database {
         }
         Insert: {
           cost_price_applied: number
-          cost_price_at_the_moment?: number | null
+          cost_price_at_the_moment: number
           created_at?: string
           expense_id: number
           id?: number
@@ -427,7 +427,7 @@ export interface Database {
         }
         Update: {
           cost_price_applied?: number
-          cost_price_at_the_moment?: number | null
+          cost_price_at_the_moment?: number
           created_at?: string
           expense_id?: number
           id?: number
@@ -620,75 +620,6 @@ export interface Database {
           }
         ]
       }
-      items_copy: {
-        Row: {
-          catalog_status: Database["public"]["Enums"]["catalog_status2"]
-          cost: number | null
-          created_at: string | null
-          description: string | null
-          id: number | null
-          image: string | null
-          item_category_id: number | null
-          name: string | null
-          quantity: number | null
-          sale_price: number | null
-          sku: string | null
-          slug: string | null
-          status: Database["public"]["Enums"]["item_status"] | null
-          type: Database["public"]["Enums"]["item_type"] | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          catalog_status?: Database["public"]["Enums"]["catalog_status2"]
-          cost?: number | null
-          created_at?: string | null
-          description?: string | null
-          id?: number | null
-          image?: string | null
-          item_category_id?: number | null
-          name?: string | null
-          quantity?: number | null
-          sale_price?: number | null
-          sku?: string | null
-          slug?: string | null
-          status?: Database["public"]["Enums"]["item_status"] | null
-          type?: Database["public"]["Enums"]["item_type"] | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          catalog_status?: Database["public"]["Enums"]["catalog_status2"]
-          cost?: number | null
-          created_at?: string | null
-          description?: string | null
-          id?: number | null
-          image?: string | null
-          item_category_id?: number | null
-          name?: string | null
-          quantity?: number | null
-          sale_price?: number | null
-          sku?: string | null
-          slug?: string | null
-          status?: Database["public"]["Enums"]["item_status"] | null
-          type?: Database["public"]["Enums"]["item_type"] | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      join_conditions: {
-        Row: {
-          string_agg: string | null
-        }
-        Insert: {
-          string_agg?: string | null
-        }
-        Update: {
-          string_agg?: string | null
-        }
-        Relationships: []
-      }
       notification: {
         Row: {
           body: string | null
@@ -696,9 +627,7 @@ export interface Database {
           id: number
           image: string | null
           title: string | null
-          type: Database["public"]["Enums"]["notificationTypes"]
-          types: Database["public"]["Enums"]["notificationtype"] | null
-          typess: Database["public"]["Enums"]["notificationtype"] | null
+          type: Database["public"]["Enums"]["notificationtype"] | null
           updated_at: string
         }
         Insert: {
@@ -707,9 +636,7 @@ export interface Database {
           id?: number
           image?: string | null
           title?: string | null
-          type?: Database["public"]["Enums"]["notificationTypes"]
-          types?: Database["public"]["Enums"]["notificationtype"] | null
-          typess?: Database["public"]["Enums"]["notificationtype"] | null
+          type?: Database["public"]["Enums"]["notificationtype"] | null
           updated_at?: string
         }
         Update: {
@@ -718,9 +645,7 @@ export interface Database {
           id?: number
           image?: string | null
           title?: string | null
-          type?: Database["public"]["Enums"]["notificationTypes"]
-          types?: Database["public"]["Enums"]["notificationtype"] | null
-          typess?: Database["public"]["Enums"]["notificationtype"] | null
+          type?: Database["public"]["Enums"]["notificationtype"] | null
           updated_at?: string
         }
         Relationships: []
@@ -983,7 +908,6 @@ export interface Database {
           payment_provider_id: number | null
           point_of_sale_id: number | null
           sale_channel_id: number | null
-          sale_item_id: number | null
           sale_number: number
           sale_state: Database["public"]["Enums"]["sale_state_enum"]
           sale_type: Database["public"]["Enums"]["sale_type_enum"]
@@ -1005,10 +929,9 @@ export interface Database {
           payment_provider_id?: number | null
           point_of_sale_id?: number | null
           sale_channel_id?: number | null
-          sale_item_id?: number | null
           sale_number?: number
           sale_state?: Database["public"]["Enums"]["sale_state_enum"]
-          sale_type?: Database["public"]["Enums"]["sale_type_enum"]
+          sale_type: Database["public"]["Enums"]["sale_type_enum"]
           status: Database["public"]["Enums"]["sale_status_enum"]
           subtotal: number
           total_applied: number
@@ -1027,7 +950,6 @@ export interface Database {
           payment_provider_id?: number | null
           point_of_sale_id?: number | null
           sale_channel_id?: number | null
-          sale_item_id?: number | null
           sale_number?: number
           sale_state?: Database["public"]["Enums"]["sale_state_enum"]
           sale_type?: Database["public"]["Enums"]["sale_type_enum"]
@@ -1038,6 +960,13 @@ export interface Database {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_sale_channel"
+            columns: ["sale_channel_id"]
+            isOneToOne: false
+            referencedRelation: "sale_channel"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "fk_sale_client"
             columns: ["client_id"]
@@ -1067,13 +996,6 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_sale_item"
-            columns: ["sale_item_id"]
-            isOneToOne: false
-            referencedRelation: "sale_item"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "fk_sale_payment_method"
             columns: ["payment_form_id"]
             isOneToOne: false
@@ -1092,13 +1014,6 @@ export interface Database {
             columns: ["point_of_sale_id"]
             isOneToOne: false
             referencedRelation: "point_of_sale"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_sale_type"
-            columns: ["sale_channel_id"]
-            isOneToOne: false
-            referencedRelation: "sale_channel"
             referencedColumns: ["id"]
           },
           {
@@ -1238,59 +1153,6 @@ export interface Database {
           }
         ]
       }
-      user_duplicate: {
-        Row: {
-          business_description: string | null
-          business_type: Database["public"]["Enums"]["business_type"] | null
-          bussines_name: string | null
-          created_at: string
-          deleted_at: string | null
-          email: string | null
-          id: string
-          name: string | null
-          number: string | null
-          provider: string | null
-          role: string | null
-          updated_at: string
-        }
-        Insert: {
-          business_description?: string | null
-          business_type?: Database["public"]["Enums"]["business_type"] | null
-          bussines_name?: string | null
-          created_at?: string
-          deleted_at?: string | null
-          email?: string | null
-          id: string
-          name?: string | null
-          number?: string | null
-          provider?: string | null
-          role?: string | null
-          updated_at?: string
-        }
-        Update: {
-          business_description?: string | null
-          business_type?: Database["public"]["Enums"]["business_type"] | null
-          bussines_name?: string | null
-          created_at?: string
-          deleted_at?: string | null
-          email?: string | null
-          id?: string
-          name?: string | null
-          number?: string | null
-          provider?: string | null
-          role?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_duplicate_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       user_notification_state: {
         Row: {
           created_at: string
@@ -1373,30 +1235,6 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
-      }
-      user_notification_tokenstest: {
-        Row: {
-          created_at: string
-          id: number
-          token: string | null
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: never
-          token?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: never
-          token?: string | null
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
       }
     }
     Views: {
@@ -1635,27 +1473,12 @@ export interface Database {
       }
     }
     Functions: {
-      add_column_to_view:
-        | {
-            Args: {
-              view_name: string
-              new_column_name: string
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              view_name: string
-              new_column_name: string
-              new_column_definition: string
-            }
-            Returns: undefined
-          }
-      check_email_exists: {
+      add_column_to_view: {
         Args: {
-          email: string
+          view_name: string
+          new_column_name: string
         }
-        Returns: boolean
+        Returns: undefined
       }
       check_sales_existence: {
         Args: Record<PropertyKey, never>
@@ -1687,6 +1510,14 @@ export interface Database {
         }
         Returns: string
       }
+      get_active_user_count: {
+        Args: {
+          min_sales: number
+          start_date: string
+          end_date: string
+        }
+        Returns: number
+      }
       get_base_slug: {
         Args: {
           name_in: string
@@ -1705,14 +1536,6 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: number[]
       }
-      get_inactive_user_tokens: {
-        Args: Record<PropertyKey, never>
-        Returns: Record<string, unknown>
-      }
-      get_inactive_users_notification_token: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
       get_items_for_authenticated_users: {
         Args: Record<PropertyKey, never>
         Returns: number[]
@@ -1725,19 +1548,6 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: number[]
       }
-      get_user_email:
-        | {
-            Args: {
-              user_email: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              user_id: number
-            }
-            Returns: string
-          }
       get_user_notification_tokens: {
         Args: Record<PropertyKey, never>
         Returns: Record<string, unknown>[]
@@ -1777,10 +1587,7 @@ export interface Database {
       business_type: "products" | "services" | "products and services"
       catalog_state_enum: "published" | "hidden"
       catalog_status: "draft" | "active"
-      catalog_status_2: "active" | "inactive"
-      catalog_status_3: "active" | "inactive"
       catalog_status_en: "active" | "inactive"
-      catalog_status2: "active" | "inactive"
       debt_client_status: "paid" | "pending"
       debt_provider_status: "paid" | "pending"
       discount_type: "fixed" | "proportional"
@@ -1789,28 +1596,15 @@ export interface Database {
       expense_type_enum: "open_expense" | "items_expense"
       item_status: "active" | "deleted"
       item_type: "product" | "service"
-      name_code_enum:
-        | "credit card"
-        | "debit card"
-        | "bank transfer"
-        | "other"
-        | "cash"
-        | "card"
-      notificationtokenstatus: "active" | "inactive"
-      notificationtokenstatus1: "inactive" | "active"
+      name_code_enum: "card" | "cash" | "bank transfer" | "other"
+      notificationtokenstatus: "inactive" | "active"
       notificationtype:
         | "inactiveUsers"
         | "userWithoutProducts"
         | "userWithoutClients"
         | "userWithoutProviders"
         | "noAction"
-      notificationTypes:
-        | "inactiveUsers"
-        | "userWithoutProducts"
-        | "userWithoutClients"
-        | "userWithoutProviders"
-        | "noAction"
-      payment_provider_name: "zettle"
+      payment_provider_name: "zettle" | "clip"
       sale_state_enum: "active" | "deleted"
       sale_status_enum: "paid" | "debt"
       sale_type_enum: "open_sale" | "items_sale"

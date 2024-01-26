@@ -42,8 +42,8 @@ export function Sidebar({ handleSignOut }: SidebarProps) {
                         </div>
                     </li>
                     {
-                        menuTabs.map((item) => {
-                            return (<li>
+                        menuTabs.map((item, index) => {
+                            return (<li key={`${index}-${item.name}`}>
                                 <Link
                                     key={item.href}
                                     href={item.href}
@@ -69,8 +69,8 @@ export function Sidebar({ handleSignOut }: SidebarProps) {
                         </div>
                     </li>
                     {
-                        settingsTab.map((item) => {
-                            return (<li>
+                        settingsTab.map((item, index) => {
+                            return (<li key={`settings-${index}-${item.name}`}>
                                 <Link
                                     key={item.href}
                                     href={item.href}
