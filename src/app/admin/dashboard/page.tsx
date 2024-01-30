@@ -1,26 +1,38 @@
 "use client";
 
-import { useSupabase } from "@/lib/Supabase-provider";
-import { useEffect, useState } from "react";
 import { es } from "date-fns/locale";
 import { DateRangePicker, DateRangePickerItem, Grid, Text, Title } from "@tremor/react";
 import ActiveUsers from "@/components/dashboard/active-users";
 import { useDashboard } from "@/components/dashboard/provider";
 
 export default function Page() {
-	const { supabase } = useSupabase();
-	const [session, setSession] = useState<any>(null);
 	const dashboard = useDashboard();
+  const currentDate = new Date();
+  const last7Days  = new Date();
+  last7Days.setDate(currentDate.getDate() - 6)
 
-	//get session from supabase
-	useEffect(() => {
-		supabase.auth.getSession().then(({ data: { session } }) => {
-			setSession(session);
-			// getActiveUsers();
-		});
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+  new Date().setDate(currentDate.getDate() - 6);
+	const dateRangePickerOptions = [
+		{
+			key: "ytd",
+			value: "ytd",
+			from: new Date(currentDate.getFullYear(), 0, 1),
+			label: "Año actual",
+		},
+		{
+			key: "half",
+			value: "half",
+			from: new Date(currentDate.getFullYear(), 0, 1),
+			to: new Date(currentDate.getFullYear(), 5, 31),
+			label: "Primer semestre",
+		},
+    {
+      key: "last7Days",
+      value: "last7Days",
+      from: last7Days, // Hace 6 días para incluir hoy en el rango de 7 días
+      label: "Últimos 7 días",
+    },
+	];
 
 	return (
 		<div className="w-full bg-white p-5">
@@ -33,12 +45,11 @@ export default function Page() {
 				selectPlaceholder="Seleccionar"
 				color="rose"
 			>
-				<DateRangePickerItem key="ytd" value="ytd" from={new Date(2023, 0, 1)}>
-					Año actual
-				</DateRangePickerItem>
-				<DateRangePickerItem key="half" value="half" from={new Date(2023, 0, 1)} to={new Date(2023, 5, 31)}>
-					Primer semestre
-				</DateRangePickerItem>
+				{dateRangePickerOptions.map((option) => (
+					<DateRangePickerItem key={option.key} value={option.value} from={option.from} to={option.to}>
+						{option.label}
+					</DateRangePickerItem>
+				))}
 			</DateRangePicker>
 			<Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-8">
 				<ActiveUsers />

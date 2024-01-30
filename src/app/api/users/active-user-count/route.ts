@@ -21,8 +21,8 @@ export async function GET(_req: NextRequest) {
       .from("user")
       .select("*")
       .single();
-
-    if (user?.role !== "admin") {
+	
+    if (user?.role === "admin") {
       adminUser = user;
     }
   }
