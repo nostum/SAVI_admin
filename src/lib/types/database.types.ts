@@ -1510,7 +1510,7 @@ export interface Database {
         }
         Returns: string
       }
-      get_active_user_count: {
+      get_active_users_count: {
         Args: {
           min_sales: number
           start_date: string
@@ -1544,6 +1544,20 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: number[]
       }
+      get_retained_users: {
+        Args: {
+          start_date: string
+          end_date: string
+        }
+        Returns: string[]
+      }
+      get_retained_users_count: {
+        Args: {
+          start_date: string
+          end_date: string
+        }
+        Returns: number
+      }
       get_sales_for_authenticated_users: {
         Args: Record<PropertyKey, never>
         Returns: number[]
@@ -1551,6 +1565,15 @@ export interface Database {
       get_user_notification_tokens: {
         Args: Record<PropertyKey, never>
         Returns: Record<string, unknown>[]
+      }
+      get_users_with_consecutive_sales: {
+        Args: {
+          start_date: string
+          end_date: string
+        }
+        Returns: {
+          result_user_id: string
+        }[]
       }
       get_users_without_clients_notification_tokens: {
         Args: Record<PropertyKey, never>

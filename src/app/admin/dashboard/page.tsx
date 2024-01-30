@@ -4,6 +4,7 @@ import { es } from "date-fns/locale";
 import { DateRangePicker, DateRangePickerItem, Grid, Text, Title } from "@tremor/react";
 import ActiveUsers from "@/components/dashboard/active-users";
 import { useDashboard } from "@/components/dashboard/provider";
+import RetainedUsers from "@/components/dashboard/retained-users";
 
 export default function Page() {
 	const dashboard = useDashboard();
@@ -53,6 +54,7 @@ export default function Page() {
 			</DateRangePicker>
 			<Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-8">
 				<ActiveUsers />
+				<RetainedUsers />
 			</Grid>
 		</div>
 	);

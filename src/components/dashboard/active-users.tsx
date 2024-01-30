@@ -5,8 +5,9 @@ import Skeleton from "react-loading-skeleton";
 import { Card, Flex, Metric, NumberInput, Subtitle, Text } from "@tremor/react";
 import { useSupabase } from "@/lib/Supabase-provider";
 import { useDashboard } from "./provider";
+import InfoIcon from "../icons/InfoIcon";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-loading-skeleton/dist/skeleton.css";
-
 
 export default function ActiveUsers() {
 	// Retrieve Supabase session and dashboard context
@@ -43,7 +44,7 @@ export default function ActiveUsers() {
 		const queryString = new URLSearchParams(params).toString();
 
 		try {
-			const response = await fetch(`/api/users/active-user-count?${queryString}`, {
+			const response = await fetch(`/api/users/active-users-count?${queryString}`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -56,7 +57,6 @@ export default function ActiveUsers() {
 			// Update activeUsers state with the fetched data
 			setActiveUsers(data.activeUsers ?? 0);
 		} catch (error) {
-
 			console.error("Error fetching active user count:", error);
 		} finally {
 			setLoading(false);
@@ -65,26 +65,38 @@ export default function ActiveUsers() {
 
 	return (
 		<Card>
-			<Subtitle>Usuarios Activos</Subtitle>
-
-			{/* <Text>Número  de usuarios que han realizado al menos X cantidad de ventas dentro del rango especificado.</Text> */}
-			<Flex justifyContent="between" alignItems="center" className="space-x-2 mb-3">
-				<Text>Minimo número de ventas:</Text>
-				<NumberInput
-					className="w-10"
-					min={1}
-					required={true}
-					value={minSales <= 0 ? "" : minSales}
-					onValueChange={(number) => {
-						if (isNaN(number)) {
-							setMinSales(0);
-						} else {
-							setMinSales(number);
-						}
-					}}
-				/>
+			<div className="flex space-x-1.5 items-center">
+				<Subtitle>Usuarios Activos</Subtitle>
+				<div data-tooltip-id="my-tooltip-1">
+					<InfoIcon />
+				</div>
+			</div>
+			<Flex justifyContent="between" flexDirection="col" alignItems="start">
+				<Flex justifyContent="between" alignItems="center" className="space-x-2 mb-3">
+					<Text>Minimo número de ventas:</Text>
+					<NumberInput
+						className="w-10"
+						min={1}
+						required={true}
+						value={minSales <= 0 ? "" : minSales}
+						onValueChange={(number) => {
+							if (isNaN(number)) {
+								setMinSales(0);
+							} else {
+								setMinSales(number);
+							}
+						}}
+					/>
+				</Flex>
+				<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : activeUsers}</Metric>
 			</Flex>
-			<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : activeUsers}</Metric>
+			<ReactTooltip id="my-tooltip-1" place="bottom" variant="info">
+				<p>
+					Número  de usuarios que han realizado<br />
+					al menos X cantidad de ventas dentro del<br />
+					rango especificado.
+				</p>
+			</ReactTooltip>
 		</Card>
 	);
 }
