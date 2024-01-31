@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { Card, Metric, Subtitle, Text} from "@tremor/react";
+import { Card, Icon, Metric, Subtitle, Text} from "@tremor/react";
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { useSupabase } from "@/lib/Supabase-provider";
 import { useDashboard } from "./provider";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import InfoIcon from "../icons/InfoIcon";
+import { EmailOutlined, Phone } from "@mui/icons-material";
 
 
 type RegisteredUser = {
@@ -95,7 +97,7 @@ export default function RegisteredUsers() {
 						if(registeredUsers.provider === null) return null
 						return (
 							<span key={i} className="flex space-x-1.5 items-center p-1" >
-								 <span className="text-base" key={i}>{registeredUsers.provider==="email"?<MailIcon/>:<PhoneIcon/>} 
+								 <span className="text-base" key={i}>{registeredUsers.provider==="email"?<EmailOutlined fontSize="large" />:<PhoneIphoneIcon fontSize="large" />} 
 								 </span>
 								<span>{registeredUsers.total_users}</span>
 							
@@ -121,10 +123,5 @@ export default function RegisteredUsers() {
 const MailIcon=()=> {
 	return (
 		<svg className="h-8 w-8 text-black"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="3" y="5" width="18" height="14" rx="2" />  <polyline points="3 7 12 13 21 7" /></svg>
-	)
-}
-const PhoneIcon=()=> {
-	return (
-		<svg className="h-8 w-8 text-black"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round">  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />  <line x1="12" y1="18" x2="12.01" y2="18" /></svg>
 	)
 }
