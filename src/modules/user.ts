@@ -1,6 +1,21 @@
 "use server";
 import supabase from "@/lib/supabase";
 
+export const getRegisteredUsers = async ({
+	startDate,
+	endDate,
+}:{
+	startDate: Date;
+	endDate: Date;
+}) => {
+	const result = await supabase.rpc("get_registered_users_count", {
+		start_date: startDate.toISOString(),
+		end_date: endDate.toISOString(),
+	});
+
+	return result.data ?? null;
+	
+}
 export const getActiveUsers = async ({
 	startDate,
 	endDate,

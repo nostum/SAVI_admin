@@ -1518,6 +1518,13 @@ export interface Database {
         }
         Returns: number
       }
+      get_registered_users_count: {
+        Args: {
+          start_date: string
+          end_date: string
+        }
+        Returns: number
+      }
       get_base_slug: {
         Args: {
           name_in: string
