@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       catalog: {
@@ -1518,13 +1518,6 @@ export interface Database {
         }
         Returns: number
       }
-      get_registered_users_count: {
-        Args: {
-          start_date: string
-          end_date: string
-        }
-        Returns: number
-      }
       get_base_slug: {
         Args: {
           name_in: string
@@ -1551,19 +1544,36 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: number[]
       }
-      get_retained_users: {
+      get_registered_users_count: {
         Args: {
           start_date: string
           end_date: string
         }
-        Returns: string[]
+        Returns: Record<string, unknown>[]
+      }
+      get_retained_users: {
+        Args: {
+          start_date: string
+          end_date: string
+          min_sales: number
+          min_distinct_days: number
+        }
+        Returns: {
+          user_id: string
+          category: string
+        }[]
       }
       get_retained_users_count: {
         Args: {
           start_date: string
           end_date: string
+          min_sales: number
+          min_distinct_days: number
         }
-        Returns: number
+        Returns: {
+          irregular_count: number
+          regular_count: number
+        }[]
       }
       get_sales_for_authenticated_users: {
         Args: Record<PropertyKey, never>

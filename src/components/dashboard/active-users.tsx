@@ -16,7 +16,7 @@ export default function ActiveUsers() {
 
 	// State variables for active users count, minimum sales, and loading indicator
 	const [activeUsers, setActiveUsers] = useState<number>(0);
-	const [minSales, setMinSales] = useState<number>(1);
+	const [minSales, setMinSales] = useState<number>(5);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	// Effect hook to fetch active users when date range or minimum sales change
@@ -64,36 +64,36 @@ export default function ActiveUsers() {
 	};
 
 	return (
-		<Card>
+		<Card className="flex flex-col">
 			<div className="flex space-x-1.5 items-center">
 				<Subtitle>Usuarios Activos</Subtitle>
 				<div data-tooltip-id="my-tooltip-1">
 					<InfoIcon />
 				</div>
 			</div>
-			<Flex justifyContent="between" flexDirection="col" alignItems="start">
-				<Flex justifyContent="between" alignItems="center" className="space-x-2 mb-3">
-					<Text>Minimo número de ventas:</Text>
-					<NumberInput
-						className="w-10"
-						min={1}
-						required={true}
-						value={minSales <= 0 ? "" : minSales}
-						onValueChange={(number) => {
-							if (isNaN(number)) {
-								setMinSales(0);
-							} else {
-								setMinSales(number);
-							}
-						}}
-					/>
-				</Flex>
-				<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : activeUsers}</Metric>
+			<Flex justifyContent="between" alignItems="center" className="space-x-2 mb-auto">
+				<Text>Minimo número de ventas:</Text>
+				<NumberInput
+					className="w-10"
+					min={1}
+					required={true}
+					value={minSales <= 0 ? "" : minSales}
+					onValueChange={(number) => {
+						if (isNaN(number)) {
+							setMinSales(0);
+						} else {
+							setMinSales(number);
+						}
+					}}
+				/>
 			</Flex>
+			<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : activeUsers}</Metric>
 			<ReactTooltip id="my-tooltip-1" place="bottom" variant="info">
 				<p>
-					Número  de usuarios que han realizado<br />
-					al menos X cantidad de ventas dentro del<br />
+					Número de usuarios que han realizado
+					<br />
+					al menos X cantidad de ventas dentro del
+					<br />
 					rango especificado.
 				</p>
 			</ReactTooltip>

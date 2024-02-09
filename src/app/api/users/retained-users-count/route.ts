@@ -39,6 +39,8 @@ export async function GET(_req: NextRequest) {
 
   const startDate = new Date(params.get("start_date") ?? '');
   const endDate = new Date(params.get("end_date") ?? '');
+  const minSales = parseInt(params.get("min_sales") ?? '');
+  const minDistinctDays = parseInt(params.get("min_distinct_days") ?? '');
 
   if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
     return NextResponse.json({
@@ -49,7 +51,7 @@ export async function GET(_req: NextRequest) {
 		});
   }
     
-  const retainedUsers = await get_retained_users({startDate, endDate});
+  const retainedUsers = await get_retained_users({startDate, endDate, minSales, minDistinctDays});
 
 	return NextResponse.json({
 		retainedUsers: retainedUsers,
