@@ -13,7 +13,7 @@ export const config = {
          * Feel free to modify this pattern to include more paths.
          */
         // "/((?!_next/static|_next/image|favicon.ico).*)",
-        '/((?!api|_next|.*\\..*).*)'
+        '/((?!_next|.*\\..*).*)'
     ],
 };
 
@@ -25,25 +25,37 @@ export default async function middleware(req: NextRequest) {
     const supabase = createMiddlewareClient<Database>({ req, res });
     const { data: activeSession } = await supabase.auth.getSession();
 
-
-
-    // Get the pathname of the request (e.g. /, /about, /blog/first-post)
     const path = url.pathname;
 
-
-    // Authenticated user redirection 
     if (!activeSession.session && path !== "/") {
+        if (path.startsWith("/api")) {
+            return NextResponse.json({
+                status: 401,
+                message: {
+                    code: "Not authorized",
+                    message: "You are not authorized to perform this action",
+                },
+            })
+        }
+
         return NextResponse.redirect(new URL("/", req.url));
+    } else if (activeSession.session) {
+        const { data: user } = await supabase.from("user").select("*").single();
 
-    } else if (activeSession.session && path == "/") {
-        if (activeSession.session) {
-            const { data: user } = await supabase.from("user").select("*").single();
-
-            if (user?.role == "admin") {
-                return NextResponse.redirect(new URL("/admin/dashboard", req.url));
-            }
+        if (path === "/" && user?.role == "admin") {
+            return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+        } else if (path.startsWith("/api") && user?.role !== "admin") {
+            return NextResponse.json({
+                status: 401,
+                message: {
+                    code: "Not authorized",
+                    message: "You are not authorized to perform this actions",
+                },
+            })
+        }
+        if (path !== "/" && user?.role !== "admin") {
             return NextResponse.redirect(new URL("/", req.url));
         }
+
     }
 }
-

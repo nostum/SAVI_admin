@@ -10,46 +10,22 @@ export async function GET(_req: NextRequest) {
 	const supabaseClient = createRouteHandlerClient<Database>({
 		cookies: () => cookieStore,
 	});
-  const params = _req.nextUrl.searchParams;
-  let adminUser: User | null = null;
+	const params = _req.nextUrl.searchParams;
 
-	const { data: activeSession } = await supabaseClient.auth.getSession();
 
-  if(activeSession.session) {
-    //Get current user and check if user is an admin
-    const { data: user } = await supabaseClient
-      .from("user")
-      .select("*")
-      .single();
-	
-    if (user?.role === "admin") {
-      adminUser = user;
-    }
-  }
+	const startDate = new Date(params.get("start_date") ?? '');
+	const endDate = new Date(params.get("end_date") ?? '');
 
-	if (!activeSession.session || adminUser == null) {
+	if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
 		return NextResponse.json({
-			status: 401,
+			status: 400,
 			message: {
-				code: "Not authorized",
-				message: "You are not authorized to perform this action",
+				message: "Invalid request parameters."
 			},
 		});
 	}
 
-  const startDate = new Date(params.get("start_date") ?? '');
-  const endDate = new Date(params.get("end_date") ?? '');
-
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return NextResponse.json({
-			status: 400,
-			message: {
-        message: "Invalid request parameters."
-			},
-		});
-  }
-    
-  const retainedUsers = await get_retained_users({startDate, endDate});
+	const retainedUsers = await get_retained_users({ startDate, endDate });
 
 	return NextResponse.json({
 		retainedUsers: retainedUsers,

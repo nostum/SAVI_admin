@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/lib/types/database.types";
-import {  getRegisteredUsers } from "@/modules/user";
+import { getRegisteredUsers } from "@/modules/user";
 import { User } from "@/lib/types/supabase.types";
 
 export async function GET(_req: NextRequest) {
@@ -10,47 +10,22 @@ export async function GET(_req: NextRequest) {
 	const supabaseClient = createRouteHandlerClient<Database>({
 		cookies: () => cookieStore,
 	});
-  const params = _req.nextUrl.searchParams;
-  let adminUser: User | null = null;
+	const params = _req.nextUrl.searchParams;
 
-	const { data: activeSession } = await supabaseClient.auth.getSession();
+	const startDate = new Date(params.get("start_date") ?? '');
+	const endDate = new Date(params.get("end_date") ?? '');
 
-  if(activeSession.session) {
-    //Get current user and check if user is an admin
-    const { data: user } = await supabaseClient
-      .from("user")
-      .select("*")
-      .single();
-	
-    if (user?.role === "admin") {
-      adminUser = user;
-    }
-  }
 
-	if (!activeSession.session || adminUser == null) {
+	if (isNaN(startDate.getTime()) || isNaN(startDate.getTime())) {
 		return NextResponse.json({
-			status: 401,
+			status: 400,
 			message: {
-				code: "Not authorized",
-				message: "You are not authorized to perform this action",
+				message: "Invalid request parameters."
 			},
 		});
 	}
 
-  const startDate = new Date(params.get("start_date") ?? '');
-  const endDate = new Date(params.get("end_date") ?? '');
-
-
-  if (isNaN(startDate.getTime()) || isNaN(startDate.getTime()) ) {
-    return NextResponse.json({
-			status: 400,
-			message: {
-        message: "Invalid request parameters."
-			},
-		});
-  }
-    
-  const registeredUsers = await getRegisteredUsers({startDate, endDate});
+	const registeredUsers = await getRegisteredUsers({ startDate, endDate });
 
 	return NextResponse.json({
 		registeredUsers: registeredUsers,
