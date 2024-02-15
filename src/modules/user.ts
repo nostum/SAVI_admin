@@ -36,13 +36,19 @@ export const getActiveUsers = async ({
 export const get_retained_users = async ({
 	startDate,
 	endDate,
+	minDistinctDays,
+	minSales,
 }: {
 	startDate: Date;
 	endDate: Date;
+	minDistinctDays: number,
+	minSales: number,
 }) => {
 	const result = await supabase.rpc("get_retained_users_count", {
 		start_date: startDate.toISOString(),
 		end_date: endDate.toISOString(),
+		min_distinct_days: minDistinctDays,
+		min_sales: minSales,
 	});
-	return result.data ?? 0;
+	return result.data?.length ? result.data[0] : {};
 };
