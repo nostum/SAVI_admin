@@ -3,6 +3,8 @@ interface ConfigInterface {
     publicSupabaseUrl: string;
     supabaseServiceRole: string;
     cache: ConfigCache;
+    gcloudCredentials: JSON
+    dataLakeProjectId: string
 }
 
 interface ConfigCache {
@@ -18,13 +20,14 @@ const config: ConfigInterface = {
     // These environment variables are only available in the Node.js environment
     supabaseServiceRole: process.env.SUPABASE_SERVICE_ROLE ?? "",
     cache: {
-        revalidate:
-            !isNaN(Number(process.env.REVALIDATE_INTERVAL)) &&
-                Number(process.env.REVALIDATE_INTERVAL) >= 0
-                ? Number(process.env.REVALIDATE_INTERVAL)
-                : false,
+        revalidate: !isNaN(Number(process.env.REVALIDATE_INTERVAL)) &&
+            Number(process.env.REVALIDATE_INTERVAL) >= 0
+            ? Number(process.env.REVALIDATE_INTERVAL)
+            : false,
         secure: process.env.NODE_ENV === "production",
     },
+    gcloudCredentials: JSON.parse(process.env.GCLOUD_CREDENTIALS ?? ""),
+    dataLakeProjectId: process.env.DATALAKE_PROJECTID ?? ""
 };
 
 export default config;

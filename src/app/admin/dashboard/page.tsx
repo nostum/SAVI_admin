@@ -6,14 +6,15 @@ import ActiveUsers from "@/components/dashboard/active-users";
 import { useDashboard } from "@/components/dashboard/provider";
 import RetainedUsers from "@/components/dashboard/retained-users";
 import RegisteredUsers from "@/components/dashboard/registered-users";
+import AppDownloads from "@/components/dashboard/app-downloads";
 
 export default function Page() {
 	const dashboard = useDashboard();
-  const currentDate = new Date();
-  const last7Days  = new Date();
-  last7Days.setDate(currentDate.getDate() - 6)
+	const currentDate = new Date();
+	const last7Days = new Date();
+	last7Days.setDate(currentDate.getDate() - 6)
 
-  new Date().setDate(currentDate.getDate() - 6);
+	new Date().setDate(currentDate.getDate() - 6);
 	const dateRangePickerOptions = [
 		{
 			key: "last7Days",
@@ -39,44 +40,44 @@ export default function Page() {
 			value: "half2",
 			from: new Date(currentDate.getFullYear(), 6, 1),
 			to: new Date(currentDate.getFullYear(), 11, 31),
-		
+
 			label: "Segundo semestre",
 		},
-		
+
 		{
 			key: "q1",
 			value: "q1",
 			from: new Date(currentDate.getFullYear(), 0, 1),
 			to: new Date(currentDate.getFullYear(), 2, 31),
 			label: "Primer trimestre",
-		   },
-		   {
+		},
+		{
 			key: "q2",
 			value: "q2",
 			from: new Date(currentDate.getFullYear(), 3, 1),
 			to: new Date(currentDate.getFullYear(), 5, 30),
 			label: "Segundo trimestre",
-		   },
-		   {
+		},
+		{
 			key: "q3",
 			value: "q3",
 			from: new Date(currentDate.getFullYear(), 6, 1),
 			to: new Date(currentDate.getFullYear(), 8, 30),
 			label: "Tercer trimestre",
-		   },
-		   {
+		},
+		{
 			key: "q4",
 			value: "q4",
 			from: new Date(currentDate.getFullYear(), 9, 1),
 			to: new Date(currentDate.getFullYear(), 11, 31),
 			label: "Cuarto trimestre",
-		   },
-		   {
+		},
+		{
 			key: "alltime",
 			value: "alltime",
 			from: new Date(2022, 0, 1),
 			label: "Todo el tiempo",
-			
+
 		},
 
 	];
@@ -101,6 +102,7 @@ export default function Page() {
 				))}
 			</DateRangePicker>
 			<Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-8">
+				<AppDownloads />
 				<RegisteredUsers />
 				<ActiveUsers />
 				<RetainedUsers />
