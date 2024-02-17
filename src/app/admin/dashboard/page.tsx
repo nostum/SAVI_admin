@@ -104,7 +104,7 @@ export default function Page() {
 			<Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-8">
 				<AppDownloads />
 				<RegisteredUsers />
-				<ActiveUsers />
+				{/* <ActiveUsers /> */}
 				<RetainedUsers />
 			</Grid>
 		</div>

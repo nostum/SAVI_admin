@@ -76,7 +76,7 @@ export default function RetainedUsers() {
 		<Card>
 			<div className="flex flex-col h-full justify-between">
 				<div className="flex space-x-1.5 items-center mb-2">
-					<Subtitle>Retención de usuarios</Subtitle>
+					<Subtitle>Usuarios Activos</Subtitle>
 					<div data-tooltip-id="my-tooltip-2">
 						<InfoIcon />
 					</div>
@@ -111,33 +111,36 @@ export default function RetainedUsers() {
 						/>
 						<ReactTooltip id="my-tooltip-3" place="bottom" variant="info">
 							<p>
-								Este parámetro determina el número mínimo<br />
-								de días en los cuales un usuario debio registrar<br />
-								ventas para ser clasificado como &quot;regular&quot;.<br />
+								Este parámetro determina el número mínimo
+								<br />
+								de días en los cuales un usuario debio registrar
+								<br />
+								ventas para ser clasificado como &quot;regular&quot;.
+								<br />
 							</p>
 						</ReactTooltip>
 					</div>
 				</div>
 				<div className="flex space-x-6">
 					<div className="flex items-center space-x-2">
-						{/* <GroupRemoveIcon /> */}
-						<Text>Usuarios iregulares: </Text>
-						<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : retainedUsers.irregular_count}</Metric>
+						{/* <GroupAddIcon /> */}
+						<Text>Regulares: </Text>
+						<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : retainedUsers.regular_count}</Metric>
 					</div>
 					<div className="flex items-center space-x-2">
-						{/* <GroupAddIcon /> */}
-						<Text>Usuarios regulares: </Text>
-						<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : retainedUsers.regular_count}</Metric>
+						{/* <GroupRemoveIcon /> */}
+						<Text>Iregulares: </Text>
+						<Metric>{loading ? <Skeleton width={80} height={30} count={1} /> : retainedUsers.irregular_count}</Metric>
 					</div>
 				</div>
 			</div>
 			<ReactTooltip id="my-tooltip-2" place="bottom" variant="info">
 				<p>
-					Usuarios que han registrado ventas
+					Número de usuarios que han realizado
 					<br />
-					al menos una vez cada 7 días a lo largo
+					al menos X cantidad de ventas dentro del
 					<br />
-					de todo el periodo especificado.
+					rango especificado.
 				</p>
 			</ReactTooltip>
 		</Card>
