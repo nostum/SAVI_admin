@@ -11,7 +11,8 @@ export default function Home() {
   const router = useRouter();
   const { supabase } = useSupabase();
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -27,7 +28,7 @@ export default function Home() {
   };
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center bg-gray-200">
+      <form className="flex min-h-screen items-center justify-center bg-gray-200">
         <div className="w-full max-w-sm rounded bg-white p-6 shadow-md">
           <h2 className="mb-5 text-center text-2xl font-bold">SAVI Login</h2>
           <div className="mb-4 flex justify-center">
@@ -75,13 +76,14 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <button
               className="focus:shadow-outline hover:bg-black-700 w-full rounded bg-black px-4 py-2 font-bold text-white focus:outline-none"
-              onClick={() => handleSignIn()}
+              type="submit"
+              onClick={handleSignIn}
             >
               Sign In
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 }

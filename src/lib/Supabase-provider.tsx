@@ -4,47 +4,48 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
-import type { SupabaseClient } from "@supabase/auth-helpers-nextjs";
+import type { Session, SupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 type SupabaseContext = {
-    supabase: SupabaseClient;
+	supabase: SupabaseClient;
+    session?: Session | null;
 };
 
 const Context = createContext<SupabaseContext | undefined>(undefined);
 
-export default function SupabaseProvider({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const [supabase] = useState(() => createPagesBrowserClient());
-    const router = useRouter();
+export default function SupabaseProvider({ children }: { children: React.ReactNode }) {
+	const [supabase] = useState(() => createPagesBrowserClient());
+	const router = useRouter();
+	const [session, setSession] = useState<Session | null>(null);
 
-    useEffect(() => {
-        const {
-            data: { subscription },
-        } = supabase.auth.onAuthStateChange(() => {
-            router.refresh();
-        });
+	useEffect(() => {
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setSession(session);
+		});
 
-        return () => {
-            subscription.unsubscribe();
-        };
-    }, [router, supabase]);
+		const {
+			data: { subscription },
+		} = supabase.auth.onAuthStateChange(() => {
+			router.refresh();
+		});
 
-    return (
-        <Context.Provider value={{ supabase }}>
-            <>{children}</>
-        </Context.Provider>
-    );
+		return () => subscription.unsubscribe();
+
+	}, [router, supabase]);
+
+	return (
+		<Context.Provider value={{ supabase, session }}>
+			<>{children}</>
+		</Context.Provider>
+	);
 }
 
 export const useSupabase = () => {
-    const context = useContext(Context);
+	const context = useContext(Context);
 
-    if (context === undefined) {
-        throw new Error("useSupabase must be used inside SupabaseProvider");
-    }
+	if (context === undefined) {
+		throw new Error("useSupabase must be used inside SupabaseProvider");
+	}
 
-    return context;
+	return context;
 };

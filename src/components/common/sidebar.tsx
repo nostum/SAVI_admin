@@ -42,8 +42,8 @@ export function Sidebar({ handleSignOut }: SidebarProps) {
                         </div>
                     </li>
                     {
-                        menuTabs.map((item) => {
-                            return (<li>
+                        menuTabs.map((item, index) => {
+                            return (<li key={`${index}-${item.name}`}>
                                 <Link
                                     key={item.href}
                                     href={item.href}
@@ -63,24 +63,24 @@ export function Sidebar({ handleSignOut }: SidebarProps) {
 
                     <li className="px-5">
                         <div className="flex h-8 flex-row items-center">
-                            <div className="text-sm font-light tracking-wide text-gray-500">
+                            <div className="text-sm font-light tracking-wide text-gray-500 opacity-50">
                                 Settings
                             </div>
                         </div>
                     </li>
                     {
-                        settingsTab.map((item) => {
-                            return (<li>
+                        settingsTab.map((item, index) => {
+                            return (<li key={`settings-${index}-${item.name}`}>
                                 <Link
                                     key={item.href}
                                     href={item.href}
                                     className={`relative flex h-11 flex-row items-center border-l-4 pr-6 text-gray-600 hover:border-indigo-500 hover:bg-gray-50 hover:text-gray-800 focus:outline-none ${pathname === item.href ? 'border-indigo-500' : 'border-transparent'}`}
 
                                 >
-                                    <span className="ml-4 inline-flex items-center justify-center">
+                                    <span className="ml-4 inline-flex items-center justify-center opacity-50">
                                         {item.icon}
                                     </span>
-                                    <span className="ml-2 truncate text-sm tracking-wide">
+                                    <span className="ml-2 truncate text-sm tracking-wide opacity-50">
                                         {item.name}
                                     </span>
                                 </Link>
